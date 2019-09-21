@@ -4,6 +4,7 @@ import { Form, Icon, Input, Button, Checkbox, Card } from "antd";
 import { Link } from "react-router-dom";
 import { login } from "../store/actions/auth.actions";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 
 const LoginPage = styled.div`
     width: 100%;
@@ -20,21 +21,24 @@ const LoginCard = styled(Card)`
     display: flex;
     align-items: center;
     justify-content: center;
+    background: ${props => props.bg};
 `;
 
 const LoginForm = styled(Form)`
     max-width: 300px;
 `;
 
-const Forgot = styled.a`
-    float: right;
-`;
-
 const LoginButton = styled(Button)`
     width: 100%;
+    min-width: 150px;
 `;
 
-function Login({ form: { getFieldDecorator, validateFields } = {}, login }) {
+function Login({
+    form: { getFieldDecorator, validateFields } = {},
+    login,
+    history,
+    isAuthenticated
+}) {
     const onSubmit = e => {
         e.preventDefault();
         validateFields((err, values) => {
@@ -43,8 +47,15 @@ function Login({ form: { getFieldDecorator, validateFields } = {}, login }) {
             }
         });
     };
+    React.useEffect(() => {
+        console.log(isAuthenticated);
+        if (isAuthenticated) {
+            history.push("/");
+        }
+    }, [isAuthenticated]);
     return (
         <LoginPage>
+            <LoginCard bg='#1890ff' />
             <LoginCard>
                 <LoginForm onSubmit={onSubmit}>
                     <Form.Item>
@@ -90,15 +101,13 @@ function Login({ form: { getFieldDecorator, validateFields } = {}, login }) {
                         )}
                     </Form.Item>
                     <Form.Item>
-                        {getFieldDecorator("remember", {
-                            valuePropName: "checked",
-                            initialValue: true
-                        })(<Checkbox>Remember me</Checkbox>)}
-                        <Forgot href=''>Forgot password</Forgot>
-                        <LoginButton type='primary' htmlType='submit'>
+                        <LoginButton
+                            type='primary'
+                            size='large'
+                            htmlType='submit'>
                             Log in
                         </LoginButton>
-                        Or <Link to='/register'>register now!</Link>
+                        <Link to='/register'>Recover lost password.</Link>
                     </Form.Item>
                 </LoginForm>
             </LoginCard>
@@ -106,9 +115,11 @@ function Login({ form: { getFieldDecorator, validateFields } = {}, login }) {
     );
 }
 
-export default Form.create({ name: "login" })(
-    connect(
-        null,
-        { login }
-    )(Login)
+export default withRouter(
+    Form.create({ name: "login" })(
+        connect(
+            state => ({ isAuthenticated: state.auth.isAuthenticated }),
+            { login }
+        )(Login)
+    )
 );
