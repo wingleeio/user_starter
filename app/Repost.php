@@ -8,11 +8,11 @@ class Repost extends Model
 {
     function post()
     {
-        $this->belongsTo('App\Post');
+        return $this->belongsTo('App\Post');
     }
 
     function user()
     {
-        $this->belongsTo('App\User');
+        return $this->belongsTo('App\User');
     }
 }

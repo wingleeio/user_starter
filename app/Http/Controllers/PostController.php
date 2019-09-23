@@ -13,14 +13,14 @@ class PostController extends Controller
 
 	function get_all_posts()
 	{
-		$posts = Post::with('user')->get();
+		$posts = Post::with('user')->withCount(['reposts', 'likes'])->paginate(15);
 
 		return $posts;
 	}
 
 	function get_one_post($id)
 	{
-		$post = Post::find($id);
+		$post = Post::with('user')->withCount(['reposts', 'likes'])->get()->find($id);
 
 		return $post;
 	}
