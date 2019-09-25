@@ -8,5 +8,5 @@
     -   [Create Post](/{{route}}/{{version}}/create-post)
     -   [Get Posts](/{{route}}/{{version}}/get-post)
     -   [Get All Posts](/{{route}}/{{version}}/get-all-posts)
--   ## Reposts
+    -   [Like](/{{route}}/{{version}}/like)
     -   [Repost](/{{route}}/{{version}}/repost)

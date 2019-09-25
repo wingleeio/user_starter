@@ -3,6 +3,8 @@
 `/api/v1/posts/`
 
 <hr>
+<larecipe-badge type="success" rounded>GET</larecipe-badge>
+<hr>
 This returns all posts in queried page.
 <hr>
 
@@ -14,15 +16,17 @@ This returns all posts in queried page.
 
 ## Response Object
 
-| Property      | Value                               |
-| :------------ | :---------------------------------- |
-| id            | Number                              |
-| created_at    | Date                                |
-| updated_at    | Date                                |
-| content       | Text                                |
-| reposts_count | Number                              |
-| likes_count   | Number                              |
-| author        | [User](/{{route}}/{{version}}/user) |
+| Property                         | Value                               |
+| :------------------------------- | :---------------------------------- |
+| id                               | Number                              |
+| created_at                       | Date                                |
+| updated_at                       | Date                                |
+| content                          | Text                                |
+| reposts_count                    | Number                              |
+| likes_count                      | Number                              |
+| liked_by_user (authenticated)    | Boolean                             |
+| reposted_by_user (authenticated) | Boolean                             |
+| author                           | [User](/{{route}}/{{version}}/user) |
 
 <hr>
 
@@ -40,6 +44,8 @@ This returns all posts in queried page.
             "user_id": 1,
             "reposts_count": 4,
             "likes_count": 1,
+            "liked_by_user": false,
+            "reposted_by_user": true,
             "author": {
                 "id": 1,
                 "name": "wing",
@@ -57,6 +63,8 @@ This returns all posts in queried page.
             "user_id": 1,
             "reposts_count": 0,
             "likes_count": 0,
+            "liked_by_user": false,
+            "reposted_by_user": false,
             "author": {
                 "id": 1,
                 "name": "wing",
@@ -74,6 +82,8 @@ This returns all posts in queried page.
             "user_id": 1,
             "reposts_count": 0,
             "likes_count": 0,
+            "liked_by_user": false,
+            "reposted_by_user": false,
             "author": {
                 "id": 1,
                 "name": "wing",
@@ -91,6 +101,8 @@ This returns all posts in queried page.
             "user_id": 3,
             "reposts_count": 0,
             "likes_count": 0,
+            "liked_by_user": false,
+            "reposted_by_user": false,
             "author": {
                 "id": 3,
                 "name": "julia",
@@ -106,8 +118,10 @@ This returns all posts in queried page.
             "updated_at": "2019-09-22 22:17:19",
             "content": "wing is cooler than me",
             "user_id": 3,
-            "reposts_count": 0,
+            "reposts_count": 1,
             "likes_count": 0,
+            "liked_by_user": false,
+            "reposted_by_user": true,
             "author": {
                 "id": 3,
                 "name": "julia",
