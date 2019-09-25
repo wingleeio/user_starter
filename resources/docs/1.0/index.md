@@ -1,0 +1,12 @@
+-   ## Get Started
+    -   [Overview](/{{route}}/{{version}}/overview)
+-   ## Authentication
+    -   [Login](/{{route}}/{{version}}/login)
+    -   [Register](/{{route}}/{{version}}/register)
+    -   [Logout](/{{route}}/{{version}}/logout)
+-   ## Posts
+    -   [Create Post](/{{route}}/{{version}}/create-post)
+    -   [Get Posts](/{{route}}/{{version}}/get-post)
+    -   [Get All Posts](/{{route}}/{{version}}/get-all-posts)
+-   ## Reposts
+    -   [Repost](/{{route}}/{{version}}/repost)

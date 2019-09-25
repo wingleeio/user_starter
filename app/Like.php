@@ -8,11 +8,11 @@ class Like extends Model
 {
     function user()
     {
-        $this->hasOne('App\User');
+        return $this->hasOne('App\User');
     }
 
     function post()
     {
-        $this->hasOne('App\Post');
+        return $this->hasOne('App\Post');
     }
 }

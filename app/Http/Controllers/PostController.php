@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Helper;
+use App\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Post;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -13,14 +16,28 @@ class PostController extends Controller
 
 	function get_all_posts()
 	{
-		$posts = Post::with('user')->withCount(['reposts', 'likes'])->paginate(15);
+		$user = auth('api')->user();
+		$posts = Post::with('author')->withCount(['reposts', 'likes'])->paginate(15);
+
+		if ($user) {
+			foreach ($posts as $post) {
+				$post->liked_by_user = Helper::check_like($user->id, $post->id);
+				$post->reposted_by_user = Helper::check_repost($user->id, $post->id);
+			}
+		}
 
 		return $posts;
 	}
 
 	function get_one_post($id)
 	{
-		$post = Post::with('user')->withCount(['reposts', 'likes'])->get()->find($id);
+		$user = auth('api')->user();
+		$post = Post::with('author')->withCount(['reposts', 'likes'])->get()->find($id);
+
+		if ($user) {
+			$post->liked_by_user = Helper::check_like($user->id, $post->id);
+			$post->reposted_by_user = Helper::check_repost($user->id, $post->id);
+		}
 
 		return $post;
 	}

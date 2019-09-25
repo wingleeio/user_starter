@@ -36,5 +36,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         // Protected like routes
         Route::post('like', 'LikeController@like');
+
+        // Protected follow routes
+        Route::post('follow', 'UserController@follow_user');
     });
 });

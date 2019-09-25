@@ -21,4 +21,14 @@ class Post extends Model
     {
         return $this->hasMany('App\Like');
     }
+
+    public function author()
+    {
+        return $this->user();
+    }
+
+    public function hearts()
+    {
+        return $this->belongsToMany('App\User');
+    }
 }
