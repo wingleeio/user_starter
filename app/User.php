@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'email_verified_at', 'avatar_id', 'cover_id'
     ];
 
     /**
@@ -37,6 +37,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $with = ['avatar', 'cover'];
+
+    public function images()
+    {
+        return $this->hasMany('App\Image');
+    }
+
+    public function avatar()
+    {
+        return $this->hasOne('App\Image', 'id', 'avatar_id');
+    }
+
+    public function cover()
+    {
+        return $this->hasOne('App\Image', 'id', 'cover_id');
+    }
 
     public function posts()
     {

@@ -26,7 +26,10 @@ Route::group(['prefix' => 'v1'], function () {
     // Protected routes
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('logout', 'Auth\LoginController@logout');
+
+        // Protected user routes
         Route::get('user', 'UserController@get_current_user');
+        Route::post('user', 'UserController@update_user');
 
         // Protected post routes
         Route::post('posts', 'PostController@create_post');

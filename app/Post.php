@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    protected $hidden = ['user_id'];
+    protected $with = ['author', 'replies'];
+    protected $withCount = ['likes', 'reposts'];
 
     public function user()
     {
@@ -30,5 +33,10 @@ class Post extends Model
     public function hearts()
     {
         return $this->belongsToMany('App\User');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany('App\Post', 'parent_id');
     }
 }
