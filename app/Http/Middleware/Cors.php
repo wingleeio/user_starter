@@ -17,7 +17,6 @@ class Cors
     {
         return $next($request)
             ->header('Access-Control-Allow-Origin', 'localhost')
-            ->header('Access-Control-Allow-Origin', 'mantou-buns.netlify.com')
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     }
 }
