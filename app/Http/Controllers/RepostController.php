@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Repost;
+use App\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 class RepostController extends Controller
 {
@@ -22,38 +20,30 @@ class RepostController extends Controller
 
     function repost(Request $request)
     {
-        $repost = new Repost;
-
         $this->user_id = $request->user()->id;
         $this->post_id = $request->post_id;
 
-        $validated = $request->validate([
-            "post_id" => [
-                "required",
-                Rule::unique('reposts')->where(function ($query) {
+        $reposts = Repost::where('user_id', '=', $this->user_id)->where('post_id', '=', $this->post_id)->get();
 
-                    // Check if there is already a repost of this post by the user
-                    $post_match = $query->where('post_id', $this->post_id);
-                    $user_match = $query->where('user_id', $this->user_id);
+        if (count($reposts) < 1) {
+            $repost = new Repost;
 
-                    if ($post_match && $user_match) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
-            ]
-        ]);
-
-        if ($validated) {
             $repost->post_id = $this->post_id;
             $repost->user_id = $this->user_id;
 
             $repost->save();
 
-            return $repost;
+            $post = Post::find($this->post_id);
+
+            return $post;
         } else {
-            throw ValidationException::withMessages($validated);
+            foreach ($reposts as $repost) {
+                $repost->delete();
+            }
+
+            $post = Post::find($this->post_id);
+
+            return $post;
         }
     }
 }

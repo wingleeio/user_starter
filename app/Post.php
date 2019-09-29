@@ -9,6 +9,7 @@ class Post extends Model
     protected $hidden = ['user_id'];
     protected $with = ['author', 'replies'];
     protected $withCount = ['likes', 'reposts'];
+    protected $appends = ['liked_by_user', 'reposted_by_user'];
 
     public function user()
     {
@@ -38,5 +39,39 @@ class Post extends Model
     public function replies()
     {
         return $this->hasMany('App\Post', 'parent_id');
+    }
+
+    public function getLikedByUserAttribute()
+    {
+        $liked = false;
+
+        if (!auth('api')->check()) {
+            return $liked;
+        }
+
+        $like = $this->likes()->where('user_id', '=', auth('api')->user()->id)->first();
+
+        if ($like) {
+            $liked = true;
+        }
+
+        return $liked;
+    }
+
+    public function getRepostedByUserAttribute()
+    {
+        $reposted = false;
+
+        if (!auth('api')->check()) {
+            return $reposted;
+        }
+
+        $repost = $this->reposts()->where('user_id', '=', auth('api')->user()->id)->first();
+
+        if ($repost) {
+            $reposted = true;
+        }
+
+        return $reposted;
     }
 }

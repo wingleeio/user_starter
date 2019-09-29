@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Like;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
+use App\Post;
 
 class LikeController extends Controller
 {
@@ -15,38 +14,30 @@ class LikeController extends Controller
 
     function like(Request $request)
     {
-        $like = new Like;
-
         $this->user_id = $request->user()->id;
         $this->post_id = $request->post_id;
 
-        $validated = $request->validate([
-            "post_id" => [
-                "required",
-                Rule::unique('likes')->where(function ($query) {
+        $likes = Like::where('user_id', '=', $this->user_id)->where('post_id', '=', $this->post_id)->get();
 
-                    // Check if there is already a like of this post by the user
-                    $post_match = $query->where('post_id', $this->post_id);
-                    $user_match = $query->where('user_id', $this->user_id);
+        if (count($likes) < 1) {
+            $like = new Like;
 
-                    if ($post_match && $user_match) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
-            ]
-        ]);
-
-        if ($validated) {
             $like->post_id = $this->post_id;
             $like->user_id = $this->user_id;
 
             $like->save();
 
-            return $like;
+            $post = Post::find($this->post_id);
+
+            return $post;
         } else {
-            throw ValidationException::withMessages($validated);
+            foreach ($likes as $like) {
+                $like->delete();
+            }
+
+            $post = Post::find($this->post_id);
+
+            return $post;
         }
     }
 }
