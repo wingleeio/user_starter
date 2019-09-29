@@ -79,7 +79,11 @@ class UserController extends Controller
 	{
 		$user = User::find($request->user_id);
 
-		$user->followers()->attach($request->user()->id);
+		if ($user->following_user) {
+			$user->followers()->detach($request->user()->id);
+		} else {
+			$user->followers()->attach($request->user()->id);
+		}
 
 		$user->save();
 

@@ -38,6 +38,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['following_user', 'followed_by'];
+
     protected $with = ['avatar', 'cover'];
 
     public function images()
@@ -68,5 +70,39 @@ class User extends Authenticatable
     public function following()
     {
         return $this->belongsToMany('App\User', 'follower_user', 'follower_id', 'user_id');
+    }
+
+    public function getFollowingUserAttribute()
+    {
+        $following = false;
+
+        if (!auth('api')->check()) {
+            return $following;
+        }
+
+        $follower = $this->followers()->where('id', '=', auth('api')->user()->id)->first();
+
+        if ($follower) {
+            $following = true;
+        }
+
+        return $following;
+    }
+
+    public function getFollowedByAttribute()
+    {
+        $following = false;
+
+        if (!auth('api')->check()) {
+            return $following;
+        }
+
+        $follower = $this->following()->where('id', '=', auth('api')->user()->id)->first();
+
+        if ($follower) {
+            $following = true;
+        }
+
+        return $following;
     }
 }

@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $hidden = ['user_id'];
-    protected $with = ['author', 'replies'];
+    protected $hidden = ['user_id', 'image_id'];
+    protected $with = ['author', 'replies', 'image'];
     protected $withCount = ['likes', 'reposts'];
     protected $appends = ['liked_by_user', 'reposted_by_user'];
 
@@ -39,6 +39,11 @@ class Post extends Model
     public function replies()
     {
         return $this->hasMany('App\Post', 'parent_id');
+    }
+
+    public function image()
+    {
+        return $this->hasOne('App\Image', 'id', 'image_id');
     }
 
     public function getLikedByUserAttribute()
