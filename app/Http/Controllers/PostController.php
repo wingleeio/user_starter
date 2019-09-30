@@ -37,7 +37,7 @@ class PostController extends Controller
 
 	function get_all_posts()
 	{
-		$posts = Post::paginate(15);
+		$posts = Post::orderBy('created_at', 'desc')->paginate(15);
 
 		return $posts;
 	}
