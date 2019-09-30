@@ -27,7 +27,7 @@ class UserController extends Controller
 		$image = new Image();
 		$path = Storage::disk('s3')->put('images/', $file);
 
-		$image->path = $path;
+		$image->path = Storage::disk('s3')->url($path);;
 		$image->user_id = $id;
 
 		$image->save();
