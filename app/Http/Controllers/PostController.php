@@ -24,7 +24,7 @@ class PostController extends Controller
 	protected function upload_image($id, $post_id, $file)
 	{
 		$image = new Image();
-		$path = Storage::disk('s3')->put('images/', $file);
+		$path = Storage::disk('s3')->put('images', $file);
 
 		$image->path = $path;
 		$image->user_id = $id;
