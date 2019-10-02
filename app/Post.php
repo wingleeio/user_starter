@@ -9,7 +9,7 @@ class Post extends Model
     protected $hidden = ['user_id', 'image_id'];
     protected $with = ['author', 'replies', 'image'];
     protected $withCount = ['likes', 'reposts'];
-    protected $appends = ['liked_by_user', 'reposted_by_user'];
+    protected $appends = ['liked_by_user', 'reposted_by_user', 'parent'];
 
     public function user()
     {
@@ -44,6 +44,18 @@ class Post extends Model
     public function image()
     {
         return $this->hasOne('App\Image', 'id', 'image_id');
+    }
+
+    public function getParentAttribute()
+    {
+        if ($this->parent_id) {
+            $post = Post::find($this->parent_id);
+
+            return [
+                'id' => $post->id,
+                'author' => $post->author
+            ];
+        }
     }
 
     public function getLikedByUserAttribute()

@@ -31,6 +31,10 @@ class RepostController extends Controller
             $repost->post_id = $this->post_id;
             $repost->user_id = $this->user_id;
 
+            if ($request->content) {
+                $repost->content = $request->content;
+            }
+
             $repost->save();
 
             $post = Post::find($this->post_id);

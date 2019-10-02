@@ -38,9 +38,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['following_user', 'followed_by'];
+    protected $appends = ['following_user', 'followed_by', 'following_count', 'followers_count'];
 
     protected $with = ['avatar', 'cover'];
+
+    protected $withCount = ['posts'];
 
     public function images()
     {
@@ -87,6 +89,16 @@ class User extends Authenticatable
         }
 
         return $following;
+    }
+
+    public function getFollowingCountAttribute()
+    {
+        return $this->following()->count();
+    }
+
+    public function getFollowersCountAttribute()
+    {
+        return $this->followers()->count();
     }
 
     public function getFollowedByAttribute()
